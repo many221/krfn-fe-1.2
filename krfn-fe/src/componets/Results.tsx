@@ -1,49 +1,84 @@
-import React from 'react';
+import React from "react";
 
 interface ApplicationPacket {
-    id: number;
-    name: string;
-    agency: string;
-    link: string;
-    timeInDays: number;
-    cost: number;
+  id: number;
+  name: string;
+  agency: string;
+  link: string;
+  timeInDays: number;
+  cost: number;
 }
 
 interface LocationResponse {
-    id: number;
-    name: string;
-    log: number;
-    lat: number;
-    vendorMerchType: string;
-    county: string;
-    accessType: string;
-    spotCount: number;
-    applicationPacket: ApplicationPacket[];
+  id: number;
+  name: string;
+  log: number;
+  lat: number;
+  vendorMerchType: string;
+  county: string;
+  accessType: string;
+  spotCount: number;
+  applicationPacket: ApplicationPacket[];
 }
 
 interface ResultsProps {
-    data: LocationResponse[];
+  data: LocationResponse[];
+  vendorMerchType: string;
+  county: string;
 }
 
-const Results: React.FC<ResultsProps> = ({ data }) => {
-    
+const Results: React.FC<ResultsProps> = ({ data, vendorMerchType, county }) => {
+  if (!data.length) {
     return (
-        <div>
-            {data.map(location => (
-                <ul key={location.id} className="list-group list-group-horizontal mb-3">
-                    <li className="list-group-item">{location.name}</li>
-                    <li className="list-group-item">{location.county}</li>
-                    <li className="list-group-item">{location.vendorMerchType}</li>
-                    <li className="list-group-item">{location.accessType}</li>
-                    <li className="list-group-item">{location.spotCount}</li>
-                    <li className="list-group-item">Total Applications: {location.applicationPacket.length}</li>
-                    <li className="list-group-item">Total Cost: ${location.applicationPacket.reduce((sum, packet) => sum + packet.cost, 0)}</li>
-                    <li className="list-group-item">Total Time: {location.applicationPacket.reduce((sum, packet) => sum + packet.timeInDays, 0)} days</li>
-                </ul>
-            ))}
-        </div>
+      <p>
+        Sorry, We Don't Have Any Information About Selling {vendorMerchType} in{" "}
+        {county}
+      </p>
     );
+  }
+
+  return (
+    <div className="table-responsive">
+      <table className="table table-bordered ">
+        <thead>
+          <tr>
+            <th>County</th>
+            <th>Name</th>
+            <th>Merch Type</th>
+            <th>Access Type</th>
+            <th>Spot Count</th>
+            <th>Application Packet Size</th>
+            <th>Total Cost</th>
+            <th>Total Time In Days (in days)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.id}>
+              <td>{item.county}</td>
+              <td>{item.name}</td>
+              <td>{item.vendorMerchType}</td>
+              <td>{item.accessType}</td>
+              <td>{item.spotCount}</td>
+              <td>{item.applicationPacket.length}</td>
+              <td>
+                {item.applicationPacket.reduce(
+                  (acc, curr) => acc + curr.cost,
+                  0
+                )}
+              </td>
+              <td>
+                {item.applicationPacket.reduce(
+                  (acc, curr) => acc + curr.timeInDays,
+                  0
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default Results;
-
