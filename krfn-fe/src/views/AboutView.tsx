@@ -7,7 +7,7 @@ const About: React.FC = () => {
     return (
         <Container>
             <h2>About Us</h2>
-            <p>This is some information about our company.</p>
+            <h3>PAGE IS CURRENTLY UNDER CONSTRUCTION.</h3>
         </Container>
     );
 };

@@ -6,8 +6,7 @@ const Contact: React.FC = () => {
     return (
         <Container>
             <h2>Contact Us</h2>
-            <p>Email us at: contact@ourcompany.com</p>
-            <p>Phone: +1-123-456-7890</p>
+            <h3>PAGE IS CURRENTLY UNDER CONSTRUCTION.</h3>
         </Container>
     );
 };
