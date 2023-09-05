@@ -1,41 +1,81 @@
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
+import { Form, Button, Row, Col } from "react-bootstrap";
 
-const SearchBar: React.FC<{ onSearch: (county: string, vendorMerchType: string) => void }> = ({ onSearch }) => {
-    const countyRef = useRef<HTMLSelectElement>(null);
-    const vendorMerchTypeRef = useRef<HTMLSelectElement>(null);
+const COUNTY = [
+  "ALAMEDA",
+  "CONTRA_COSTA",
+  "MARIN",
+  "NAPA",
+  "SAN_FRANCISCO",
+  "SAN_MATEO",
+  "SANTA_CLARA",
+  "SOLANO",
+  "SONOMA",
+];
 
-    const COUNTY = ["SAN_FRANCISCO", "SAN_MATEO", "ALAMEDA", "SANTA_CLARA", "MARIN", "SONOMA", "NAPA", "CONTRA_COSTA", "SOLANO"];
-    const VENDOR_MERCH_TYPE = ["DRY_GOODS", "FOOD_AND_BEVERAGES", "PRODUCE", "CRAFTS", "OTHER"];
+const VENDOR_MERCH_TYPE = [
+  "DRY_GOODS",
+  "FOOD_AND_BEVERAGES",
+  "PRODUCE",
+  "CRAFTS",
+  "OTHER",
+];
 
-    const handleSearchClick = () => {
-        if (countyRef.current && vendorMerchTypeRef.current) {
-            const county = countyRef.current.value;
-            const vendorMerchType = vendorMerchTypeRef.current.value;
-            onSearch(county, vendorMerchType);
-        }
-    };
+interface SearchBarProps {
+  onSearch: (county: string, vendorMerchType: string) => void;
+}
 
-    return (
-        <div className="d-flex justify-content-center my-4">
-            <div className="mx-2">
-                <label htmlFor="county-select">Where do you want to sell?</label>
-                <select id="county-select" className="form-select" ref={countyRef}>
-                    <option value="" disabled selected>Select County</option>
-                    {COUNTY.map(county => <option key={county} value={county}>{county}</option>)}
-                </select>
-            </div>
-            <div className="mx-2">
-                <label htmlFor="type-select">What do you sell?</label>
-                <select id="type-select" className="form-select" ref={vendorMerchTypeRef}>
-                    <option value="" disabled selected>Select Merch Type</option>
-                    {VENDOR_MERCH_TYPE.map(type => <option key={type} value={type}>{type}</option>)}
-                </select>
-            </div>
-            <div className="mx-2">
-                <button className="btn btn-primary mt-4" onClick={handleSearchClick}>Search</button>
-            </div>
-        </div>
-    );
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+  const countyRef = useRef<HTMLSelectElement>(null);
+  const vendorMerchTypeRef = useRef<HTMLSelectElement>(null);
+
+  const handleSearchClick = () => {
+    if (countyRef.current && vendorMerchTypeRef.current) {
+      onSearch(countyRef.current.value, vendorMerchTypeRef.current.value);
+    }
+  };
+
+  return (
+    <Form className="center-container">
+      <Row>
+        <Col md={4}>
+          <Form.Group controlId="vendorMerchType">
+            <Form.Control as="select" className="custom-select" ref={vendorMerchTypeRef} defaultValue="">
+              <option value="" disabled>
+               What do you sell?
+              </option>
+              {VENDOR_MERCH_TYPE.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </Col>
+        <Col md={4}>
+          <Form.Group controlId="county">
+            <Form.Control as="select" ref={countyRef} defaultValue="">
+              <option value="" disabled>
+               Where do you want to sell?
+              </option>
+              {COUNTY.map((county) => (
+                <option key={county} value={county}>
+                  {county}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </Col>
+        <Col md={4}>
+        <Button variant="primary" onClick={handleSearchClick}>
+        Search
+      </Button>
+        </Col>
+      </Row>
+
+    
+    </Form>
+  );
 };
 
 export default SearchBar;

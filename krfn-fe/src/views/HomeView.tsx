@@ -1,44 +1,55 @@
 import React, { useState } from "react";
 import SearchBar from "../componets/SearchBar";
 import Results from "../componets/Results";
-import * as api from "../services/api";
-import { searchByCountyAndVendorMerchType } from "../services/api";
+import {
+  LocationResponse,
+  searchByCountyAndVendorMerchType,
+} from "../services/api";
+import { Container } from "react-bootstrap";
+import "./HomeView.css";
 
 const HomeView: React.FC = () => {
-  const [data, setData] = useState<api.LocationResponse[]>([]);
-
-  const [county, setCounty] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<LocationResponse[]>([]);
   const [vendorMerchType, setVendorMerchType] = useState<string>("");
-  const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
+  const [county, setCounty] = useState<string>("");
+  const [searchAttempted, setSearchAttempted] = useState<boolean>(false); // New state variable
 
-  const handleSearch = async (county: string, vendorMerchType: string) => {
+  const handleSearch = async (
+    selectedCounty: string,
+    selectedVendorMerchType: string
+  ) => {
+    setSearchAttempted(true); // Update the state when search is triggered
+
     try {
-      const response = await searchByCountyAndVendorMerchType(
-        county,
-        vendorMerchType
+      setVendorMerchType(selectedVendorMerchType);
+      setCounty(selectedCounty);
+      const results = await searchByCountyAndVendorMerchType(
+        selectedCounty,
+        selectedVendorMerchType
       );
-      setData(response);
-      setCounty(county);
-      setVendorMerchType(vendorMerchType);
-      setSearchExecuted(true); // Set searchExecuted to true here
+      setSearchResults(results);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching search results:", error);
+      setSearchResults([]); // Clear previous results on error
     }
   };
 
   return (
-    <div>
-      <SearchBar onSearch={handleSearch} />
+    <Container>
+      <Container className="hero-container">
+        <h1>KRFN</h1>
+        <p>GUIDANCE, COMPLIANCE, AND SUPPORT</p>
+      </Container>
 
-      {/* Pass county and vendorMerchType as props to Results */}
-      {searchExecuted && (
+      <SearchBar onSearch={handleSearch} />
+      {searchAttempted && (
         <Results
-          data={data}
-          county={county}
+          data={searchResults}
           vendorMerchType={vendorMerchType}
+          county={county}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

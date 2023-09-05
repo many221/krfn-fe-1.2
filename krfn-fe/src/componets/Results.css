@@ -1,0 +1,8 @@
+.m-container {
+    text-align: center;  /* Centers the text horizontally */
+    margin: 50px 0;      /* Adjusts vertical spacing before and after the container */
+    padding: 20px;       /* Inner padding for the container */
+    text-align: left;
+    background-color: #f8f9fa; /* A light background color; change as needed */
+    border-radius: 10px; /* Rounded corners for the container */
+}

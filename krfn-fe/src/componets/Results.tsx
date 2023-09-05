@@ -1,4 +1,6 @@
 import React from "react";
+import { Container, Table } from "react-bootstrap";
+import "./Results.css";
 
 interface ApplicationPacket {
   id: number;
@@ -28,56 +30,56 @@ interface ResultsProps {
 }
 
 const Results: React.FC<ResultsProps> = ({ data, vendorMerchType, county }) => {
-  if (!data.length) {
+  if (data.length === 0) {
     return (
-      <p>
-        Sorry, We Don't Have Any Information About Selling {vendorMerchType} in{" "}
-        {county}
-      </p>
+      <Container className="m-container">
+        <h2>
+          No results found for {vendorMerchType} in {county}
+        </h2>
+      </Container>
     );
   }
 
   return (
-    <div className="table-responsive">
-      <table className="table table-bordered ">
-        <thead>
-          <tr>
-            <th>County</th>
-            <th>Name</th>
-            <th>Merch Type</th>
-            <th>Access Type</th>
-            <th>Spot Count</th>
-            <th>Application Packet Size</th>
-            <th>Total Cost</th>
-            <th>Total Time In Days (in days)</th>
+    <Table bordered hover responsive>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Longitude</th>
+          <th>Latitude</th>
+          <th>Vendor Merch Type</th>
+          <th>County</th>
+          <th>Access Type</th>
+          <th>Spot Count</th>
+          <th>Application Packet Size</th>
+          <th>Total Cost</th>
+          <th>Total Time (Days)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row) => (
+          <tr key={row.id}>
+            <td>{row.name}</td>
+            <td>{row.log}</td>
+            <td>{row.lat}</td>
+            <td>{row.vendorMerchType}</td>
+            <td>{row.county}</td>
+            <td>{row.accessType}</td>
+            <td>{row.spotCount}</td>
+            <td>{row.applicationPacket.length}</td>
+            <td>
+              {row.applicationPacket.reduce((acc, curr) => acc + curr.cost, 0)}
+            </td>
+            <td>
+              {row.applicationPacket.reduce(
+                (acc, curr) => acc + curr.timeInDays,
+                0
+              )}
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td>{item.county}</td>
-              <td>{item.name}</td>
-              <td>{item.vendorMerchType}</td>
-              <td>{item.accessType}</td>
-              <td>{item.spotCount}</td>
-              <td>{item.applicationPacket.length}</td>
-              <td>
-                {item.applicationPacket.reduce(
-                  (acc, curr) => acc + curr.cost,
-                  0
-                )}
-              </td>
-              <td>
-                {item.applicationPacket.reduce(
-                  (acc, curr) => acc + curr.timeInDays,
-                  0
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </Table>
   );
 };
 

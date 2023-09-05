@@ -1,28 +1,40 @@
-import React from 'react';
-
+import React from "react";
+import { Navbar, Nav } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import logo from "../assets/logo.png"; // Assuming logo is placed in src/assets
 
 const Header: React.FC = () => {
-    return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid">
-                <a className="navbar-brand" href="/">KRFN MVP v.1</a>
-                <div className="collapse navbar-collapse justify-content-end">
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/">Home</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/about">About</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/contact">Contact</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    );
-    
-}
+  return (
+    <Navbar
+      variant="light"
+      expand="lg"
+      className="justify-content-between"
+    >
+      <LinkContainer to="/">
+        <Navbar.Brand>
+          <img
+            src={logo}
+            className="d-inline-block align-top"
+            alt="Site Logo"
+          />{" "}
+        </Navbar.Brand>
+      </LinkContainer>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav>
+          <LinkContainer to="/">
+            <Nav.Link className="rounded px-3">Home</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/about">
+            <Nav.Link className="rounded px-3">About</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/contact">
+            <Nav.Link className="rounded px-3">Contact</Nav.Link>
+          </LinkContainer>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
+  );
+};
 
 export default Header;
