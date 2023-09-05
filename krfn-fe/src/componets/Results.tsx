@@ -1,86 +1,112 @@
-import React from "react";
-import { Container, Table } from "react-bootstrap";
-import "./Results.css";
+import React, { useState } from 'react';
+import { Container } from 'react-bootstrap';
+import './Results.css';
 
 interface ApplicationPacket {
-  id: number;
-  name: string;
-  agency: string;
-  link: string;
-  timeInDays: number;
-  cost: number;
+    id: number;
+    name: string;
+    agency: string;
+    link: string;
+    timeInDays: number;
+    cost: number;
 }
 
 interface LocationResponse {
-  id: number;
-  name: string;
-  log: number;
-  lat: number;
-  vendorMerchType: string;
-  county: string;
-  accessType: string;
-  spotCount: number;
-  applicationPacket: ApplicationPacket[];
+    id: number;
+    name: string;
+    log: number;
+    lat: number;
+    vendorMerchType: string;
+    county: string;
+    accessType: string;
+    spotCount: number;
+    applicationPacket: ApplicationPacket[];
 }
 
 interface ResultsProps {
-  data: LocationResponse[];
-  vendorMerchType: string;
-  county: string;
+    data: LocationResponse[];
+    vendorMerchType: string;
+    county: string;
 }
 
-const Results: React.FC<ResultsProps> = ({ data, vendorMerchType, county }) => {
-  if (data.length === 0) {
-    return (
-      <Container className="m-container">
-        <h2>
-          No results found for {vendorMerchType} in {county}
-        </h2>
-      </Container>
-    );
-  }
-
-  return (
-    <Table bordered hover responsive>
-      <thead>
+const ResultsTableHeader = () => (
+    <thead>
         <tr>
-          <th>Name</th>
-          <th>Longitude</th>
-          <th>Latitude</th>
-          <th>Vendor Merch Type</th>
-          <th>County</th>
-          <th>Access Type</th>
-          <th>Spot Count</th>
-          <th>Application Packet Size</th>
-          <th>Total Cost</th>
-          <th>Total Time (Days)</th>
+            <th>County</th>
+            <th>Name</th>
+            <th>Merch Type</th>
+            <th>Access Type</th>
+            <th>Spot Count</th>
+            <th>Application Packet Size</th>
+            <th>Total Cost</th>
+            <th>Total Time In Days (in days)</th>
         </tr>
-      </thead>
-      <tbody>
-        {data.map((row) => (
-          <tr key={row.id}>
-            <td>{row.name}</td>
-            <td>{row.log}</td>
-            <td>{row.lat}</td>
-            <td>{row.vendorMerchType}</td>
-            <td>{row.county}</td>
-            <td>{row.accessType}</td>
-            <td>{row.spotCount}</td>
-            <td>{row.applicationPacket.length}</td>
-            <td>
-              {row.applicationPacket.reduce((acc, curr) => acc + curr.cost, 0)}
-            </td>
-            <td>
-              {row.applicationPacket.reduce(
-                (acc, curr) => acc + curr.timeInDays,
-                0
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
+    </thead>
+);
+
+const Results: React.FC<ResultsProps> = ({ data, vendorMerchType, county }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    
+    const lastIndex = currentPage * itemsPerPage;
+    const firstIndex = lastIndex - itemsPerPage;
+    const currentItems = data.slice(firstIndex, lastIndex);
+
+    const pagesCount = Math.ceil(data.length / itemsPerPage);
+
+    if (!data.length) {
+        return (
+            <Container className='m-container'>
+                Sorry, We Don't Have Any Information About Selling {vendorMerchType} in {county}
+            </Container>
+        );
+    }
+
+    return (
+        <div className="table-responsive">
+            <table className="table table-bordered">
+                <ResultsTableHeader />
+                <tbody>
+                    {currentItems.map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.county}</td>
+                            <td>{item.name}</td>
+                            <td>{item.vendorMerchType}</td>
+                            <td>{item.accessType}</td>
+                            <td>{item.spotCount}</td>
+                            <td>{item.applicationPacket.length}</td>
+                            <td>
+                                {item.applicationPacket.reduce(
+                                    (acc, curr) => acc + curr.cost,
+                                    0
+                                )}
+                            </td>
+                            <td>
+                                {item.applicationPacket.reduce(
+                                    (acc, curr) => acc + curr.timeInDays,
+                                    0
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {pagesCount > 1 && (
+                <div className="pagination-container">
+                    {[...Array(pagesCount)].map((_, i) => (
+                        <button
+                            key={i}
+                            className={`pagination-button ${i + 1 === currentPage ? 'active' : ''}`}
+                            onClick={() => setCurrentPage(i + 1)}
+                        >
+                            {i + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default Results;
+

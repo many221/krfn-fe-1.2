@@ -6,3 +6,34 @@
     background-color: #f8f9fa; /* A light background color; change as needed */
     border-radius: 10px; /* Rounded corners for the container */
 }
+
+/* Add padding around the table */
+.table-responsive {
+    padding: 20px;
+}
+
+/* Style the pagination buttons */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    background-color: #007BFF; /* Default Bootstrap primary color */
+    color: #FFF;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination-button:hover {
+    background-color: #0056b3; /* Darken the primary color on hover */
+}
+
+.pagination-button.active {
+    background-color: #0056b3; /* Active button has the darker color */
+}
