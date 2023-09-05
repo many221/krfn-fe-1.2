@@ -37,3 +37,28 @@
 .pagination-button.active {
     background-color: #0056b3; /* Active button has the darker color */
 }
+
+.table-padding {
+    padding: 20px;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    transition: background-color 0.3s;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  

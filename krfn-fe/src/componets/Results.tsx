@@ -64,7 +64,7 @@ const Results: React.FC<ResultsProps> = ({ data, vendorMerchType, county }) => {
 
     return (
         <div className="table-responsive">
-            <table className="table table-bordered">
+            <table className="table table-bordered table-hover">
                 <ResultsTableHeader />
                 <tbody>
                     {currentItems.map((item) => (
