@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080/api/locations';
+const BASE_URL = 'http://44.239.193.82:8080/api/locations';
 
 export interface LocationResponse {
   id: number;
